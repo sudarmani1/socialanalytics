@@ -11,15 +11,18 @@ class LoginView(View):
 		return render(request,'login.html')
 
 	def post(self,request):
-		email 	 = request.POST.get('email')
-		password = request.POST.get('password')
-		username = User.objects.get(email=email).username
-		user = authenticate(username=username, password=password)
-		if user:
-			login(request,user)
-			return HttpResponseRedirect(reverse('index'))
-		else:
-			return render(request,'login.html')
+		try:
+			email 	 = request.POST.get('email')
+			password = request.POST.get('password')
+			username = User.objects.get(email=email).username
+			user = authenticate(username=username, password=password)
+			if user:
+				login(request,user)
+				return HttpResponseRedirect(reverse('index'))
+			else:
+				return render(request,'login.html')
+		except Exception as e:
+			return render(request,'login.html',{'error':str(e)})
 
 
 class RegisterView(View):
