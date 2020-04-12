@@ -10,11 +10,18 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os
+import os, sys
+from unipath import Path
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ENV_DIR  = Path(__file__).ancestor(2)
+PROJECT_APPS    = Path(__file__).ancestor(2)
 
+sys.path.insert(0, Path(PROJECT_APPS, 'apps'))
+load_dotenv(os.path.join(ENV_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -25,7 +32,7 @@ SECRET_KEY = 'zz2snuxx4b$5u_7_%dhkbt%j+@q)pexph-(-70&$ol3-on&6vv'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,9 +47,9 @@ BASE_APPS = [
 ]
 
 USER_APPS = [
-    'apps.insta',
-    'apps.users',
-    'apps.fb',
+    'insta',
+    'users',
+    'fb',
 ]
 
 INSTALLED_APPS = BASE_APPS + USER_APPS
@@ -128,3 +135,8 @@ LOGIN_URL = "/user/login/"
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
+ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
+AUTH_TOKEN  = os.getenv("TWILIO_AUTH_TOKEN")
+INSTA_USERNAME  = os.getenv("INSTA_USERNAME")
+INSTA_PASSWORD  = os.getenv("INSTA_PASSWORD")

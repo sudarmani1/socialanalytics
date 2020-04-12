@@ -1,2 +1,6 @@
 Django == 2.2.2
 requests
+twilio
+InstagramApi
+unipath
+python-dotenv

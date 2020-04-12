@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('insta/', include('apps.insta.urls')),
-    path('user/', include('apps.users.urls')),
-    path('fb/', include('apps.fb.urls')),
+    path('insta/', include('insta.urls')),
+    path('user/', include('users.urls')),
+    path('fb/', include('fb.urls')),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

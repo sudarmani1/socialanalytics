@@ -13,3 +13,8 @@ Analytics &amp; some nasty hidden features
 	- Update sync manually
 	- Get sms link to ask for 
 	- Get SMS/mail when someone unfollows me. Once in a day
+    - On Twilio WhatsApp command, update the Insta List
+
+##Done
+    - Send message to Twilio whatsApp, Hi
+    - Returns Insta Analytics Data

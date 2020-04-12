@@ -1,3 +1,4 @@
 **.pyc
 **/migrations/
 creds.txt
+.env
