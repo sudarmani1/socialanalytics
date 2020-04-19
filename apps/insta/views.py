@@ -4,38 +4,71 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from .models import InstagramAnalytics
+from .models import InstagramUserAnalytics
 
 from .helpers import *
 
 from InstagramAPI import InstagramAPI
 from twilio.rest import Client
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+
 
 # Create your views here.
 @login_required
 def index(request):
-    username = settings.INSTA_USERNAME
-    password = settings.INSTA_PASSWORD
+    data = {}
+    # update_insta_analytics()
+    data['analytics'] = InstagramUserAnalytics.objects.filter(user=request.user).last()
+    return render(request,'insta/my_insta_dashbaord.html',data)
+
+
+@login_required
+def insta_follower_list(request):
     data = {}
 
-    api = instagram_login(username, password)
+    # create_insta_follower_list()
+    follower_user = InstagramFollower.objects.filter(user=request.user)
+    data['private_profile_count'] = follower_user.filter(is_private = True).count()
+    data['verified_profile_count'] = follower_user.filter(is_verified = True).count()
+    data['follower_user_count'] = follower_user.count()
+
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(follower_user, 10)
     try:
-        if api.get('error'):
-            data['error'] = api.get('error')
-            return render(request,'1.html',data)
-    except:
-        pass
+        follower_user = paginator.page(page)
+    except PageNotAnInteger:
+        follower_user = paginator.page(1)
+    except EmptyPage:
+        follower_user = paginator.page(paginator.num_pages)
 
-    following_users = get_insta_following_list(api)
-
-
-    # follower_users = get_insta_followers_list(api)
-
-    data['follower_users'] = following_users
-    data['follower_count'] = len(following_users)
+    data['follower_user'] = follower_user
+    return render(request,'insta/insta_followers.html',data)
 
 
-    return render(request,'1.html',data)
+@login_required
+def insta_following_list(request):
+    data = {}
+    # create_insta_following_list()
+
+    following_user = InstagramFollowing.objects.filter(user=request.user)
+    data['private_profile_count'] = following_user.filter(is_private = True).count()
+    data['verified_profile_count'] = following_user.filter(is_verified = True).count()
+    data['following_user_count'] = following_user.count()
+
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(following_user, 10)
+    try:
+        following_user = paginator.page(page)
+    except PageNotAnInteger:
+        following_user = paginator.page(1)
+    except EmptyPage:
+        following_user = paginator.page(paginator.num_pages)
+
+    data['following_user'] = following_user
+    return render(request,'insta/insta_following.html',data)
 
 
 @csrf_exempt
