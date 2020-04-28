@@ -1,7 +1,11 @@
 import requests
-from InstagramAPI import InstagramAPI
-from .models import InstagramUserAnalytics, LinkedFbInfo, InstagramFollowing, InstagramFollower
+
 from django.conf import settings
+
+from users.models import Notification
+from .models import InstagramUserAnalytics, LinkedFbInfo, InstagramFollowing, InstagramFollower
+
+from InstagramAPI import InstagramAPI
 
 
 def get_token():
@@ -111,65 +115,66 @@ def get_insta_analytics():
 
 def update_insta_analytics():
     try:
-        username = settings.INSTA_USERNAME
-        password = settings.INSTA_PASSWORD
+        # username = settings.INSTA_USERNAME
+        # password = settings.INSTA_PASSWORD
 
-        api = instagram_login(username, password)
-        try:
-            if api.get('error'):
-                return api.get('error')
-        except:
-            pass
+        # api = instagram_login(username, password)
+        # try:
+        #     if api.get('error'):
+        #         return api.get('error')
+        # except:
+        #     pass
 
-        api.getSelfUsernameInfo()
-        result = api.LastJson
-        full_name       = result['user']['full_name']
-        profile_pic_url = result['user']['profile_pic_url']
-        followers       = result['user']['follower_count']
-        following       = result['user']['following_count']
-        media_count     = result['user']['media_count']
+        # api.getSelfUsernameInfo()
+        # result = api.LastJson
+        # full_name       = result['user']['full_name']
+        # profile_pic_url = result['user']['profile_pic_url']
+        # followers       = result['user']['follower_count']
+        # following       = result['user']['following_count']
+        # media_count     = result['user']['media_count']
 
-        insta_pk        = result['user']['pk']
-        insta_uname     = result['user']['username']
-        profile_pic_url = result['user']['profile_pic_url']
-        profile_pic_id  = result['user']['profile_pic_id']
-        biography       = result['user']['biography']
-        is_private      = result['user']['is_private']
+        # insta_pk        = result['user']['pk']
+        # insta_uname     = result['user']['username']
+        # profile_pic_url = result['user']['profile_pic_url']
+        # profile_pic_id  = result['user']['profile_pic_id']
+        # biography       = result['user']['biography']
+        # is_private      = result['user']['is_private']
 
-        profile_pic_320 = result['user']['hd_profile_pic_versions'][0]['url']
-        profile_pic_640 = result['user']['hd_profile_pic_versions'][1]['url']
-        profile_pic_full= result['user']['hd_profile_pic_url_info']['url']
+        # profile_pic_320 = result['user']['hd_profile_pic_versions'][0]['url']
+        # profile_pic_640 = result['user']['hd_profile_pic_versions'][1]['url']
+        # profile_pic_full= result['user']['hd_profile_pic_url_info']['url']
 
 
-        fb_id      = result['user']['linked_fb_info']['linked_fb_user']['id']
-        fb_name    = result['user']['linked_fb_info']['linked_fb_user']['name']
-        fb_valid   = result['user']['linked_fb_info']['linked_fb_user']['is_valid']
+        # fb_id      = result['user']['linked_fb_info']['linked_fb_user']['id']
+        # fb_name    = result['user']['linked_fb_info']['linked_fb_user']['name']
+        # fb_valid   = result['user']['linked_fb_info']['linked_fb_user']['is_valid']
 
-        # Create FB LinkedFbInfo
-        linked_fb = LinkedFbInfo.objects.create(
-            fb_id   = fb_id,
-            name    = fb_name,
-            is_valid= fb_valid)
+        # # Create FB LinkedFbInfo
+        # linked_fb = LinkedFbInfo.objects.create(
+        #     fb_id   = fb_id,
+        #     name    = fb_name,
+        #     is_valid= fb_valid)
 
-        InstagramUserAnalytics.objects.create(
-            user_id  = 1, 
-            linked_fb_info = linked_fb,
-            total_followers = followers,
-            total_following = following,
-            total_likes_get = 1,
-            total_liked     = 1,
-            media_count     = media_count,
-            insta_pk        = insta_pk,
-            insta_full_name = full_name,
-            insta_username  = insta_uname,
-            profile_pic_url = profile_pic_url,
-            profile_pic_id  = profile_pic_id,
-            is_private      = is_private,
-            biography       = biography,
-            hd_profile_pic_versions_320 = profile_pic_320,
-            hd_profile_pic_versions_640 = profile_pic_640,
-            hd_profile_pic_url_info = profile_pic_full
-        )
+        # InstagramUserAnalytics.objects.create(
+        #     user_id  = 1, 
+        #     linked_fb_info = linked_fb,
+        #     total_followers = followers,
+        #     total_following = following,
+        #     total_likes_get = 1,
+        #     total_liked     = 1,
+        #     media_count     = media_count,
+        #     insta_pk        = insta_pk,
+        #     insta_full_name = full_name,
+        #     insta_username  = insta_uname,
+        #     profile_pic_url = profile_pic_url,
+        #     profile_pic_id  = profile_pic_id,
+        #     is_private      = is_private,
+        #     biography       = biography,
+        #     hd_profile_pic_versions_320 = profile_pic_320,
+        #     hd_profile_pic_versions_640 = profile_pic_640,
+        #     hd_profile_pic_url_info = profile_pic_full
+        # )
+        create_notification("Successfully Synched")
         return "Successfully Synched"
     except Exception as e:
         print(str(e))
@@ -209,3 +214,7 @@ def get_a_follwer_data():
     except Exception as e:
         print(str(e))
         return "There is some issue while syncing your Insta data. Error : " + str(e)
+
+
+def create_notification(message):
+    Notification.objects.create(message=message)

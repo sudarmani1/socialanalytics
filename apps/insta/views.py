@@ -18,7 +18,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 @login_required
 def index(request):
     data = {}
-    # update_insta_analytics()
+    update_insta_analytics()
+
+    data['notifications'] =Notification.objects.filter(read=False)
     data['analytics'] = InstagramUserAnalytics.objects.filter(user=request.user).last()
     return render(request,'insta/my_insta_dashbaord.html',data)
 
