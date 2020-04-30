@@ -103,9 +103,9 @@ def twilio(request):
             body = "Invalid Choice... Please reply 'help' to see the option"
 
         message = client.messages.create(
-                                      from_='whatsapp:+14Secreate',
+                                      from_='whatsapp:+14155238886',
                                       body=body,
-                                      to='whatsapp:+91'
+                                      to='whatsapp:'+settings.MY_PHONE
                                   )
         return HttpResponse("Done")
     else:
