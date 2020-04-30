@@ -1,9 +1,11 @@
 {% extends 'base/base.html' %}
 {% load i18n staticfiles %}
+{% block notification %}
+{% include 'base/notification.html' %}
+{% endblock %}
 {% block content %}
-{% include 'nav.html' %}
 <div class="main-content">
-{% include 'head-navbar.html' %}
+    {% include 'head-navbar.html' %}
     <!-- Header -->
     <div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center" style="min-height: 600px; background-image: url({{ analytics.hd_profile_pic_url_info }}); background-size: cover; background-position: center top;">
         <!-- Mask -->
@@ -85,7 +87,7 @@
                                 <h3 class="mb-0">My account</h3>
                             </div>
                             <div class="col-4 text-right">
-                                <a href="#!" class="btn btn-sm btn-primary">Settings</a>
+                                <a href="#!" class="btn btn-sm btn-primary update">Update</a>
                             </div>
                         </div>
                     </div>
@@ -176,6 +178,36 @@
 {% endblock %}
 {% block script %}
 {{ block.super }}
-    <script src="{% static 'js/argon-dashboard.min.js' %}"></script>
-{% endblock %}
+<script src="{% static 'js/argon-dashboard.min.js' %}"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $(document).on("click", ".update", function() {
 
+        $.ajax({
+                type: "GET",
+                url: "/insta/insta-update",
+                success: function(data) {
+                    if(data.status==true){
+                        swal({
+                            title: data.message,
+                            text: "",
+                            icon: "success",
+                            button: "Dismiss!",
+                        })
+                    }
+                    else{
+                        swal({
+                            title: "Error while updating",
+                            text: data.message,
+                            icon: "error",
+                            button: "Dismiss!",
+                        })     
+                    }
+
+                }
+        })
+    });
+
+})
+</script>
+{% endblock %}

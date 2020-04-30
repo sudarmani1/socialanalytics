@@ -1,6 +1,6 @@
 from django.views import View
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
@@ -12,18 +12,27 @@ from InstagramAPI import InstagramAPI
 from twilio.rest import Client
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-
+from django.template.loader import get_template
+from django.core.mail import EmailMessage
 
 # Create your views here.
 @login_required
 def index(request):
     data = {}
-    update_insta_analytics()
+    # update_insta_analytics()
 
-    data['notifications'] =Notification.objects.filter(read=False)
+    data['notifications'] =Notification.objects.filter(is_read=False)
     data['analytics'] = InstagramUserAnalytics.objects.filter(user=request.user).last()
     return render(request,'insta/my_insta_dashbaord.html',data)
 
+@login_required
+def update_insta_feed(request):
+    try:
+        # update_insta_analytics()
+        pass
+        return JsonResponse({'status':True,'message':'Successfully Updated!'})
+    except Exception as e:
+        return JsonResponse({'status':False,'message':str(e)})
 
 @login_required
 def insta_follower_list(request):
@@ -103,3 +112,19 @@ def twilio(request):
         return HttpResponse("GET")
 
 
+def sendmail(request):
+    try:
+        ctx = {
+            "schedule_type"        : "test"
+        }
+
+        subject = "demo"
+
+        message = get_template('email/demo.html').render(ctx)
+        msg = EmailMessage(subject, message, to=('kewef44103@katamo1.com',),from_email='kewef44103@katamo1.com')
+        msg.content_subtype = 'html'
+        msg.send()
+        print("Mail Sent Successfully")
+        return HttpResponse("Sent mail")
+    except Exception as e:
+        print("Uh oh, We met error :",str(e))

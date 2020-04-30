@@ -6591,6 +6591,21 @@ input[type='button'].btn-block
     color: #e6e6e6;
 }
 
+.alert-notify {
+    display: flex!important;
+    width: calc(100% - 30px);
+    max-width: 600px;
+    padding-right: 80px;
+    color: rgba(255,255,255,.85);
+    box-shadow: 0 3px 10px rgba(0,0,0,.15);
+}
+
+.alert-success {
+    color: #fff;
+    border-color: #4fd69c;
+    background-color: #4fd69c;
+}
+
 .alert-darker
 {
     color: #fff;
@@ -16614,6 +16629,17 @@ a.text-lighter:focus
     border-bottom: 1px dotted rgba(255, 255, 255, .5);
 }
 
+.close>span:not(.sr-only) {
+    font-size: 1.25rem;
+    line-height: 17px;
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+    transition: all .15s ease;
+    color: rgba(0,0,0,.6);
+    border-radius: 50%;
+    background-color: transparent;
+}
 .alert-dismissible .close
 {
     top: 50%;
