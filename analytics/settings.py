@@ -136,6 +136,11 @@ LOGIN_URL = "/user/login/"
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+
 ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
 AUTH_TOKEN  = os.getenv("TWILIO_AUTH_TOKEN")
 INSTA_USERNAME  = os.getenv("INSTA_USERNAME")
