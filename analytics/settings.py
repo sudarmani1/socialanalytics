@@ -138,7 +138,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
