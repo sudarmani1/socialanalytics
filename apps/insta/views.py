@@ -89,15 +89,17 @@ def twilio(request):
         auth_token  = settings.AUTH_TOKEN
         client = Client(account_sid, auth_token)
 
-        if request.POST.get('Body') == 'Hi':
+        wsp_message = request.POST.get('Body').lower()
+
+        if wsp_message == 'Hi':
             body = "[-] Welcome To Project SocAn [-] \n -Developed By D Ashwin"
-        elif request.POST.get('Body') == 'help':
+        elif wsp_message == 'help':
             body = "[-] Select command option [-] \n" \
                     "1) Get Insta Analytics \n" \
                     "2) Update/Sync Insta Analytics Data"
-        elif request.POST.get('Body') == '1':
+        elif wsp_message == '1':
             body = get_insta_analytics()
-        elif request.POST.get('Body') == '2':
+        elif wsp_message == '2':
             body = update_insta_analytics()
         else:
             body = "Invalid Choice... Please reply 'help' to see the option"
