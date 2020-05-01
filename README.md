@@ -16,6 +16,10 @@ Analytics &amp; some nasty hidden features
     - On Twilio WhatsApp command, update the Insta List
     - Need Notification for frontend
 
+### Phase 2 :
+    - Get My Insta Details option 
+    - WhatsApp option to see the profile picture of any insta account. later
+
 ##Done
     - Send message to Twilio whatsApp, Hi
     - Returns Insta Analytics Data

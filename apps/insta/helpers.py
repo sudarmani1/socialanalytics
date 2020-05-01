@@ -103,15 +103,13 @@ def create_insta_follower_list():
 def get_insta_analytics():
     data = {}
     insta_ana = InstagramUserAnalytics.objects.all().last()
-
     data['Total Followers'] = insta_ana.total_followers
     data['Total Following'] = insta_ana.total_following
     data['Total Likes Get'] = insta_ana.total_likes_get
     data['Total Liked']     = insta_ana.total_liked
     data['Total Media Count']     = insta_ana.media_count
     data['Last Updated_at'] = insta_ana.last_updated_at.strftime("%d/%m/%Y, %H:%M:%S")
-
-    return str(data)
+    return data
 
 def update_insta_analytics():
     try:
@@ -218,3 +216,14 @@ def get_a_follwer_data():
 
 def create_notification(message):
     Notification.objects.create(message=message)
+
+def my_insta_details():
+    insta_ana = InstagramUserAnalytics.objects.all().last()
+    data = ""
+    data+="[+] My Insta Details [+] \n-------------[ SocAnt ]------------"
+    data+="\nID : "+ insta_ana.insta_pk
+    data+="\nUsername : "+ insta_ana.insta_username
+    data+="\nFull Name : "+ insta_ana.insta_full_name
+    data+="\nIs Private : "+ str(insta_ana.is_private) ##Bool True/False
+    data+="\nBio -->\n"+ insta_ana.biography
+    return data

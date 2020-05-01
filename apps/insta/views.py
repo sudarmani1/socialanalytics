@@ -85,33 +85,45 @@ def insta_following_list(request):
 @csrf_exempt
 def twilio(request):
     if request.method == 'POST':
+        wsp_message = (request.POST.get('Body')).lower()
+
         account_sid = settings.ACCOUNT_SID
         auth_token  = settings.AUTH_TOKEN
         client = Client(account_sid, auth_token)
 
-        wsp_message = request.POST.get('Body').lower()
-
-        if wsp_message == 'Hi':
-            body = "[-] Welcome To Project SocAn [-] \n -Developed By D Ashwin"
+        if wsp_message == 'hi':
+            body = """
+                [+] *Welcome To Project SocAnt* [+]\n-----------------ヾ(＾-＾)ノ----------------
+                \nVersion : 0.01
+                \n- _Developed By D Ashwin_
+                """
+        
         elif wsp_message == 'help':
-            body = "[-] Select command option [-] \n" \
-                    "1) Get Insta Analytics \n" \
-                    "2) Update/Sync Insta Analytics Data"
+            body = """
+                [+] Select one Option [+] \n-------------[ SocAnt ]------------
+                \n1) Get Insta Analytics
+                \n2) Update/Sync Insta Analytics Data
+                \n3) My Insta Details
+                """
         elif wsp_message == '1':
             body = get_insta_analytics()
+        
         elif wsp_message == '2':
             body = update_insta_analytics()
+        
+        elif wsp_message == '3':
+            body = my_insta_details()
+
         else:
             body = "Invalid Choice... Please reply 'help' to see the option"
 
         message = client.messages.create(
-                                      from_='whatsapp:+14155238886',
-                                      body=body,
-                                      to='whatsapp:'+settings.MY_PHONE
-                                  )
-        return HttpResponse("Done")
+                                    from_='whatsapp:+14155238886',
+                                    body=body,
+                                    to='whatsapp:'+settings.MY_PHONE)
+        return HttpResponse("True")
     else:
-        return HttpResponse("GET")
+        return HttpResponse("False")
 
 
 def sendmail(request):
