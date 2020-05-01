@@ -125,6 +125,21 @@ def update_insta_analytics():
 
         api.getSelfUsernameInfo()
         result = api.LastJson
+        # create_insta_analytic(result)
+
+        # Find Out new followers/unfollowers
+        api.getSelfUserFollowers()
+        follower_result = api.LastJson
+        current_status  = detect_new_follow_unfollow(follower_result)
+
+        create_notification("Successfully Synched")
+        return current_status
+    except Exception as e:
+        print(str(e))
+        return "There is some issue while syncing your Insta data. Error : " + str(e)
+
+def create_insta_analytic(result):
+    try:
         full_name       = result['user']['full_name']
         profile_pic_url = result['user']['profile_pic_url']
         followers       = result['user']['follower_count']
@@ -172,46 +187,10 @@ def update_insta_analytics():
             hd_profile_pic_versions_640 = profile_pic_640,
             hd_profile_pic_url_info = profile_pic_full
         )
-        create_notification("Successfully Synched")
-        return "Successfully Synched"
+        return True
     except Exception as e:
         print(str(e))
-        return "There is some issue while syncing your Insta data. Error : " + str(e)
-
-def get_a_follwer_data():
-    try:
-        username = settings.INSTA_USERNAME
-        password = settings.INSTA_PASSWORD
-
-        api = instagram_login(username, password)
-        try:
-            if api.get('error'):
-                return api.get('error')
-        except:
-            pass
-
-        api.getSelfUsernameInfo()
-        result = api.LastJson
-        username = result['user']['username']
-        full_name = result['user']['full_name']
-        profile_pic_url = result['user']['profile_pic_url']
-        followers = result['user']['follower_count']
-        following = result['user']['following_count']
-        media_count = result['user']['media_count']
-        
-        # Create New Object
-        InstagramUserAnalytics.objects.create(
-            user_id  = 1, 
-            total_followers = followers,
-            total_following = following,
-            media_count = media_count,
-            total_likes_get = 1,
-            total_liked =1)
-
-        return "Successfully Synched"
-    except Exception as e:
-        print(str(e))
-        return "There is some issue while syncing your Insta data. Error : " + str(e)
+        return False
 
 
 def create_notification(message):
@@ -226,4 +205,63 @@ def my_insta_details():
     data+="\nFull Name : "+ insta_ana.insta_full_name
     data+="\nIs Private : "+ str(insta_ana.is_private) ##Bool True/False
     data+="\nBio -->\n"+ insta_ana.biography
+    return data
+
+
+def detect_new_follow_unfollow(follower_result):
+
+    """
+        Long Function it is :-
+        ----------------------
+        Features it should return :
+        1) Number of New Followers
+        2) Number of Unfollowers
+        3) If someone changes DP
+        4) If someone changes From private to public
+        5) If someone changes username
+        6) If someone changes Fullname
+    """
+    data = ""
+    data+="[+] New Changes In Insta [+] \n-------------[ SocAnt ]------------"
+
+    for user in follower_result['users']:
+        try:
+            instance = InstagramFollower.objects.get(insta_pk  = user['pk'])
+
+            # Check if username is changed from previous
+            if instance.insta_username != user['username']:
+                data+="\n=> " + instance.insta_full_name + " changed username to : " + user['username']
+                instance.insta_username = user['username']
+
+            # Check if full_name is changed from previous
+            if instance.insta_full_name != user['full_name']:
+                data+="\n=> " + instance.insta_full_name + " changed full_name to : " + user['full_name']
+                instance.insta_full_name = user['full_name']
+
+            # Check if is_private is changed from previous
+            if instance.is_private != user['is_private']:
+                data+="\n=> " + instance.is_private + " changed is_private to : " + str(user['is_private'])
+                instance.is_private = user['is_private']
+
+            # Check if profile_pic_url is changed from previous
+            if instance.profile_pic_url != user['profile_pic_url']:
+                data+="\n=> " + instance.insta_full_name + " changed DP"
+                instance.profile_pic_url = user['profile_pic_url']
+
+            # Check if is_verified is changed from previous
+            if instance.is_verified != user['is_verified']:
+                data+="\n=> " + instance.insta_full_name + " changed verified"
+                instance.is_verified = user['is_verified']
+            instance.save()
+
+        except:
+            pass
+            # instace = InstagramFollower.objects.create(
+            #     user_id         = 1,
+            #     insta_pk        = user['pk'],
+            #     insta_full_name = user['full_name'],
+            #     is_private      = user['is_private'],
+            #     profile_pic_url = user['profile_pic_url'],
+            #     is_verified     = user['is_verified'],
+            #     insta_username  = user['username'])
     return data

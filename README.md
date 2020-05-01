@@ -17,9 +17,9 @@ Analytics &amp; some nasty hidden features
     - Need Notification for frontend
 
 ### Phase 2 :
-    - Get My Insta Details option 
     - WhatsApp option to see the profile picture of any insta account. later
 
 ##Done
     - Send message to Twilio whatsApp, Hi
     - Returns Insta Analytics Data
+    - Get My Insta Details option 

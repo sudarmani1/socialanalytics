@@ -3,9 +3,16 @@ from .models import InstagramUserAnalytics, TrackFollower, InstagramFollowing, I
 from users.models import Notification
 
 
-# Register your models here.
+class InstagramFollowingAdmin(admin.ModelAdmin):
+    search_fields = ("insta_username","insta_full_name")
+
+
+class InstagramFollowerAdmin(admin.ModelAdmin):
+    search_fields = ("insta_username","insta_full_name")
+
+
 admin.site.register(InstagramUserAnalytics)
-admin.site.register(InstagramFollowing)
-admin.site.register(InstagramFollower)
+admin.site.register(InstagramFollowing, InstagramFollowingAdmin)
+admin.site.register(InstagramFollower, InstagramFollowerAdmin)
 admin.site.register(TrackFollower)
 admin.site.register(Notification)

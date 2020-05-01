@@ -28,8 +28,8 @@ def index(request):
 @login_required
 def update_insta_feed(request):
     try:
-        # update_insta_analytics()
-        pass
+        update_insta_analytics()
+        # pass
         return JsonResponse({'status':True,'message':'Successfully Updated!'})
     except Exception as e:
         return JsonResponse({'status':False,'message':str(e)})
@@ -38,8 +38,15 @@ def update_insta_feed(request):
 def insta_follower_list(request):
     data = {}
 
-    # create_insta_follower_list()
     follower_user = InstagramFollower.objects.filter(user=request.user)
+
+    # If no object then create follower list first
+    if not follower_user.exists():
+        create_insta_follower_list()
+    
+    else:
+        follower_user = InstagramFollower.objects.filter(user=request.user)
+
     data['private_profile_count'] = follower_user.filter(is_private = True).count()
     data['verified_profile_count'] = follower_user.filter(is_verified = True).count()
     data['follower_user_count'] = follower_user.count()
@@ -117,10 +124,24 @@ def twilio(request):
         else:
             body = "Invalid Choice... Please reply 'help' to see the option"
 
-        message = client.messages.create(
+        # Check if body char limit exceeds 1600 Chars. 
+        limit = 1500
+
+        if len(body) > limit :
+            n = limit
+            chunked = [body[i:i+n] for i in range(0, len(body), n)]
+
+            for chunk in chunked:
+                message = client.messages.create(
+                                    from_='whatsapp:+14155238886',
+                                    body=chunk,
+                                    to='whatsapp:'+settings.MY_PHONE)
+        else:
+            message = client.messages.create(
                                     from_='whatsapp:+14155238886',
                                     body=body,
                                     to='whatsapp:'+settings.MY_PHONE)
+
         return HttpResponse("True")
     else:
         return HttpResponse("False")
