@@ -101,14 +101,17 @@ def create_insta_follower_list():
     return True
 
 def get_insta_analytics():
-    data = {}
+    data = ""
+    data+="[+] Insta Analytics [+] \n-------------[ SocAnt ]------------"
+
+    # Get Last Object
     insta_ana = InstagramUserAnalytics.objects.all().last()
-    data['Total Followers'] = insta_ana.total_followers
-    data['Total Following'] = insta_ana.total_following
-    data['Total Likes Get'] = insta_ana.total_likes_get
-    data['Total Liked']     = insta_ana.total_liked
-    data['Total Media Count']     = insta_ana.media_count
-    data['Last Updated_at'] = insta_ana.last_updated_at.strftime("%d/%m/%Y, %H:%M:%S")
+
+    data+="\n[+] Total Followers : " + str(insta_ana.total_followers)
+    data+="\n[+] Total Following : " + str(insta_ana.total_following)
+    data+="\n[+] Is_private : " + str(insta_ana.is_private)
+    data+="\n[+] Total Media Count : " + str(insta_ana.media_count)
+    data+="\n[+] Last Updated_at   : " + insta_ana.last_updated_at.strftime("%d/%m/%Y, %H:%M:%S")
     return data
 
 def update_insta_analytics():
