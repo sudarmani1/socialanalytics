@@ -200,15 +200,18 @@ def create_notification(message):
     Notification.objects.create(message=message)
 
 def my_insta_details():
-    insta_ana = InstagramUserAnalytics.objects.all().last()
-    data = ""
-    data+="[+] My Insta Details [+] \n-------------[ SocAnt ]------------"
-    data+="\nID : "+ insta_ana.insta_pk
-    data+="\nUsername : "+ insta_ana.insta_username
-    data+="\nFull Name : "+ insta_ana.insta_full_name
-    data+="\nIs Private : "+ str(insta_ana.is_private) ##Bool True/False
-    data+="\nBio -->\n"+ insta_ana.biography
-    return data
+    if InstagramUserAnalytics.objects.filter(user_id=1).exists():
+        insta_ana = InstagramUserAnalytics.objects.all().last()
+        data = ""
+        data+="[+] My Insta Details [+] \n-------------[ SocAnt ]------------"
+        data+="\nID : "+ insta_ana.insta_pk
+        data+="\nUsername : "+ insta_ana.insta_username
+        data+="\nFull Name : "+ insta_ana.insta_full_name
+        data+="\nIs Private : "+ str(insta_ana.is_private) ##Bool True/False
+        data+="\nBio -->\n"+ insta_ana.biography
+        return data
+    else:
+        return "Please update the Insta then try to fetch"
 
 
 def detect_new_follow_unfollow(follower_result):
