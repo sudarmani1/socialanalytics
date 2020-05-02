@@ -246,10 +246,16 @@ def detect_new_follow_unfollow(follower_result):
                 data+="\n=> " + instance.is_private + " changed is_private to : " + str(user['is_private'])
                 instance.is_private = user['is_private']
 
+
             # Check if profile_pic_url is changed from previous
-            if instance.profile_pic_url != user['profile_pic_url']:
+            if check_if_dp_changed(instance.profile_pic_url, user['profile_pic_url']):
                 data+="\n=> " + instance.insta_full_name + " changed DP"
                 instance.profile_pic_url = user['profile_pic_url']
+
+            # # Check if profile_pic_url is changed from previous
+            # if instance.profile_pic_url != user['profile_pic_url']:
+            #     data+="\n=> " + instance.insta_full_name + " changed DP"
+            #     instance.profile_pic_url = user['profile_pic_url']
 
             # Check if is_verified is changed from previous
             if instance.is_verified != user['is_verified']:
@@ -268,3 +274,12 @@ def detect_new_follow_unfollow(follower_result):
             #     is_verified     = user['is_verified'],
             #     insta_username  = user['username'])
     return data
+
+
+def check_if_dp_changed(local_pic1, new_pic2):
+    url1 = local_pic1.split('=')[0].split('/')[-1]
+    url2 = new_pic2.split('=')[0].split('/')[-1]
+    if url1 == url2:
+        return False
+    else:
+        return True
