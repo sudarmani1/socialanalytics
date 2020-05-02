@@ -106,11 +106,13 @@ def get_insta_analytics():
 
     # Get Last Object
     insta_ana = InstagramUserAnalytics.objects.all().last()
+    following_user = InstagramFollowing.objects.filter(user=request.user)
 
     data+="\n[+] Total Followers : " + str(insta_ana.total_followers)
     data+="\n[+] Total Following : " + str(insta_ana.total_following)
     data+="\n[+] Is_private : " + str(insta_ana.is_private)
     data+="\n[+] Total Media Count : " + str(insta_ana.media_count)
+    data+="\n[+] Private Account(Following) : " + str(following_user.filter(is_private = True).count())
     data+="\n[+] Last Updated_at   : " + insta_ana.last_updated_at.strftime("%d/%m/%Y, %H:%M:%S")
     return data
 
