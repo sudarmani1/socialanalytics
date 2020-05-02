@@ -64,13 +64,9 @@ class InstagramFollower(models.Model):
         return str(self.insta_username)
 
 class TrackFollower(models.Model):
-    tracked_by      = models.ForeignKey(InstagramUserAnalytics,on_delete=models.CASCADE)
-    user            = models.ForeignKey(User,on_delete=models.CASCADE)
-    profile_pic_url = models.CharField(max_length=255)
-    follower_count  = models.IntegerField(default=0)
-    following_count = models.IntegerField(default=0)
-    media_count     = models.IntegerField(default=0)
-    last_updated_at = models.DateTimeField(auto_now_add=True, blank=True)
+    tracked_by      = models.ForeignKey(User,on_delete=models.CASCADE) # It should be InstagramUserAnalytics
+    track_insta     = models.ForeignKey(InstagramFollowing,on_delete=models.CASCADE)
+    tracker_active  = models.BooleanField(default=True)
 
     def __str__(self):
-        return str(self.user.fullname)
+        return str(self.tracked_by)

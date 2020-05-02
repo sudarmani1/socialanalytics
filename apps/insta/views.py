@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from .models import InstagramUserAnalytics
+from .models import InstagramUserAnalytics, TrackFollower
 
 from .helpers import *
 
@@ -68,9 +68,15 @@ def insta_follower_list(request):
 @login_required
 def insta_following_list(request):
     data = {}
-    # create_insta_following_list()
 
     following_user = InstagramFollowing.objects.filter(user=request.user)
+
+    # If no object then create following list first
+    if not following_user.exists():
+        create_insta_following_list()
+    else:
+        following_user = InstagramFollowing.objects.filter(user=request.user)
+
     data['private_profile_count'] = following_user.filter(is_private = True).count()
     data['verified_profile_count'] = following_user.filter(is_verified = True).count()
     data['following_user_count'] = following_user.count()
@@ -87,6 +93,13 @@ def insta_following_list(request):
 
     data['following_user'] = following_user
     return render(request,'insta/insta_following.html',data)
+
+
+@login_required
+def insta_tracked_accounts(request):
+    data = {}
+    data['tracked_user'] = TrackFollower.objects.filter(track_insta__user=request.user)
+    return render(request,'insta/insta_tracked.html',data)
 
 
 @csrf_exempt
@@ -111,6 +124,8 @@ def twilio(request):
                 \n1) Get Insta Analytics
                 \n2) Update/Sync Insta Analytics Data
                 \n3) My Insta Details
+                \n4) My Tracked Accounts
+                \n5) Add New Account to track
                 """
         elif wsp_message == '1':
             body = get_insta_analytics()
@@ -120,6 +135,16 @@ def twilio(request):
         
         elif wsp_message == '3':
             body = my_insta_details()
+
+        elif wsp_message == '4':
+            body = get_tracked_accounts()
+
+        elif wsp_message == '5':
+            body = "Reply with add:<username of insta>"
+
+        elif wsp_message.startswith('add:'):
+            account_username = wsp_message.split(':')[1]
+            body = add_new_to_track(account_username)
 
         else:
             body = "Invalid Choice... Please reply 'help' to see the option"

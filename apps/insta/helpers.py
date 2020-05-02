@@ -3,7 +3,7 @@ import requests
 from django.conf import settings
 
 from users.models import Notification
-from .models import InstagramUserAnalytics, LinkedFbInfo, InstagramFollowing, InstagramFollower
+from .models import InstagramUserAnalytics, LinkedFbInfo, InstagramFollowing, InstagramFollower, TrackFollower
 
 from InstagramAPI import InstagramAPI
 
@@ -219,10 +219,10 @@ def detect_new_follow_unfollow(follower_result):
         Features it should return :
         1) Number of New Followers
         2) Number of Unfollowers
-        3) If someone changes DP
-        4) If someone changes From private to public
-        5) If someone changes username
-        6) If someone changes Fullname
+        3) If someone changes DP : Done
+        4) If someone changes From private to public : Done
+        5) If someone changes username : Done
+        6) If someone changes Fullname : Done
     """
     data = ""
     data+="[+] New Changes In Insta [+] \n-------------[ SocAnt ]------------"
@@ -246,16 +246,10 @@ def detect_new_follow_unfollow(follower_result):
                 data+="\n=> " + instance.is_private + " changed is_private to : " + str(user['is_private'])
                 instance.is_private = user['is_private']
 
-
             # Check if profile_pic_url is changed from previous
             if check_if_dp_changed(instance.profile_pic_url, user['profile_pic_url']):
                 data+="\n=> " + instance.insta_full_name + " changed DP"
                 instance.profile_pic_url = user['profile_pic_url']
-
-            # # Check if profile_pic_url is changed from previous
-            # if instance.profile_pic_url != user['profile_pic_url']:
-            #     data+="\n=> " + instance.insta_full_name + " changed DP"
-            #     instance.profile_pic_url = user['profile_pic_url']
 
             # Check if is_verified is changed from previous
             if instance.is_verified != user['is_verified']:
@@ -283,3 +277,32 @@ def check_if_dp_changed(local_pic1, new_pic2):
         return False
     else:
         return True
+
+def get_tracked_accounts():
+    tracked = TrackFollower.objects.all()
+    data = ""
+    data+="[+] My Tracked Accounts [+] \n-------------[ SocAnt ]------------"
+    for track in tracked:
+        data+="\nUsername : "+ track.track_insta.insta_username
+        data+="\nFull Name : "+ track.track_insta.insta_full_name
+        data+="\nIs active : "+ str(track.tracker_active)
+        data+="\n----------------------------------------"
+    return data
+
+def add_new_to_track(username):
+    try:
+        # Check if the username is in your following list or not
+        if InstagramFollowing.objects.filter(insta_username=username).exists():
+            # Check if the username is already in Tracking or not
+            track_acc = InstagramFollowing.objects.get(insta_username=username)
+
+            # if TrackFollower.objects.filter
+
+            TrackFollower.objects.create(
+                            tracked_by_id = 1,
+                            track_insta = track_acc)
+        else:
+            return "{} username is not found in your following list.".format(username)
+        return "[+] Added Successfully to Track List \n - h4pPy h4cKing :v -"
+    except Exception as e:
+        return str(e)
