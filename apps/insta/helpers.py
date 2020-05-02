@@ -128,7 +128,7 @@ def update_insta_analytics():
 
         api.getSelfUsernameInfo()
         result = api.LastJson
-        # create_insta_analytic(result)
+        create_insta_analytic(result)
 
         # Find Out new followers/unfollowers
         api.getSelfUserFollowers()
