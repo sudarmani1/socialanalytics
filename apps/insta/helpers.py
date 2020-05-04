@@ -106,7 +106,7 @@ def get_insta_analytics():
 
     # Get Last Object
     insta_ana = InstagramUserAnalytics.objects.all().last()
-    following_user = InstagramFollowing.objects.filter(user=request.user)
+    following_user = InstagramFollowing.objects.filter(user_id=1)
 
     data+="\n[+] Total Followers : " + str(insta_ana.total_followers)
     data+="\n[+] Total Following : " + str(insta_ana.total_following)
@@ -311,3 +311,6 @@ def add_new_to_track(username):
         return "[+] Added Successfully to Track List \n - h4pPy h4cKing :v -"
     except Exception as e:
         return str(e)
+
+def view_dp_of_account(username):
+    return "phase 2:"

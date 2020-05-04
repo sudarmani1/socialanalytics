@@ -17,7 +17,8 @@ Analytics &amp; some nasty hidden features
     - Need Notification for frontend
 
 ### Phase 2 :
-    - WhatsApp option to see the profile picture of any insta account. later
+    - WhatsApp option to see the profile picture of any insta account. later : 
+        use https://www.instadp.com/fullsize/<username> : with proxy on bs4
 
 ##Done
     - Send message to Twilio whatsApp, Hi

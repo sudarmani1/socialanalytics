@@ -126,6 +126,7 @@ def twilio(request):
                 \n3) My Insta Details
                 \n4) My Tracked Accounts
                 \n5) Add New Account to track
+                \n6) View DP of any Insta account
                 """
         elif wsp_message == '1':
             body = get_insta_analytics()
@@ -145,6 +146,13 @@ def twilio(request):
         elif wsp_message.startswith('add:'):
             account_username = wsp_message.split(':')[1]
             body = add_new_to_track(account_username)
+
+        elif wsp_message == '6':
+            body = "Reply with viewdp:<username of insta>"
+
+        elif wsp_message.startswith('viewdp:'):
+            account_username = wsp_message.split(':')[1]
+            body = view_dp_of_account(account_username)
 
         else:
             body = "Invalid Choice... Please reply 'help' to see the option"
