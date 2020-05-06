@@ -56,7 +56,7 @@
                                     </td>
                                     <td>
                                         <label class="custom-toggle">
-                                            <input type="checkbox" {% if user.tracker_active %} checked{% endif %}>
+                                            <input type="checkbox" class="tracker" {% if user.tracker_active %} checked{% endif %} value="{{ user.track_insta.insta_pk }}">
                                             <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                         </label>
                                     </td>
@@ -125,4 +125,42 @@
 {% block script %}
 {{ block.super }}
 <script src="{% static 'js/argon-dashboard.min.js' %}"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $(document).on("change", ".tracker", function() {
+
+        var is_active = $(this).is(':checked'); // returns true/false
+        var insta_pk  = $(this).val();
+        $.ajax({
+                type: "POST",
+                url: "/insta/tracker-update/",
+                data: {
+                    'following_insta_id' : insta_pk, 
+                    'tracker_active' : is_active,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(data) {
+                    if(data.status==true){
+                        swal({
+                            title: data.message,
+                            text: "",
+                            icon: "success",
+                            button: "Dismiss!",
+                        })
+                    }
+                    else{
+                        swal({
+                            title: "Error while Changing Status",
+                            text: data.message,
+                            icon: "error",
+                            button: "Dismiss!",
+                        })     
+                    }
+
+                }
+        })
+    });
+
+})
+</script>
 {% endblock %}

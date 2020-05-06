@@ -1,9 +1,11 @@
 import requests
+from datetime import datetime
+from bs4 import BeautifulSoup
 
 from django.conf import settings
 
 from users.models import Notification
-from .models import InstagramUserAnalytics, LinkedFbInfo, InstagramFollowing, InstagramFollower, TrackFollower
+from .models import InstagramUserAnalytics, LinkedFbInfo, InstagramFollowing, InstagramFollower, TrackFollower, InstagramMedia, InstagramCarouselMedia
 
 from InstagramAPI import InstagramAPI
 
@@ -53,10 +55,13 @@ def create_insta_following_list():
             return api.get('error')
     except:
         pass
-    api.getSelfUsersFollowing()
-    result = api.LastJson
+    # api.getSelfUsersFollowing()
+    # result = api.LastJson
+
+    result = api.getTotalSelfFollowings()
+
     count = 0
-    for user in result['users']:
+    for user in result:
         count += 1
         InstagramFollowing.objects.create(
             user_id = 1,
@@ -79,14 +84,16 @@ def create_insta_follower_list():
     try:
         if api.get('error'):
             return api.get('error')
-    except Exception as e:
-        print(str(e))
+    except:
+        pass
 
+    # api.getSelfUserFollowers()
+    # result = api.LastJson
 
-    api.getSelfUserFollowers()
-    result = api.LastJson
+    result = api.getTotalSelfFollowers()
+
     count = 0
-    for user in result['users']:
+    for user in result:
         count += 1
         InstagramFollower.objects.create(
             user_id = 1,
@@ -313,4 +320,79 @@ def add_new_to_track(username):
         return str(e)
 
 def view_dp_of_account(username):
-    return "phase 2:"
+    try:
+        url     = 'https://www.instadp.com/fullsize/'+username
+        page    = requests.get(url)
+        soup    = BeautifulSoup(page.text, 'html.parser')
+        img_tag = soup.find_all("img", class_="picture")[0]
+        img_url = img_tag.get('src')
+        return img_url
+    except Exception as e:
+        return str(e)
+
+
+def create_my_post_media():
+    try:
+        username = settings.INSTA_USERNAME
+        password = settings.INSTA_PASSWORD
+
+        api = instagram_login(username, password)
+        try:
+            if api.get('error'):
+                return api.get('error')
+        except:
+            pass
+
+        # api.getTotalSelfFollowers()
+        # import pdb; pdb.set_trace()
+        result = api.getTotalSelfUserFeed()
+
+        count = 0
+        for post in result:
+
+            # Check if that post id is in db or not
+            ## TODO
+
+            
+            count += 1
+            try:
+                print("Not corousal")
+                media_url     = post['image_versions2']['candidates'][0]['url']
+                comment_count = post['comment_count']
+                like_count    = post['like_count']
+                caption       = post['caption']['text']
+
+                uploaded_at   = datetime.fromtimestamp(post['taken_at'])
+
+                InstagramMedia.objects.create(
+                        user_id         = 1,
+                        media_url       = media_url,
+                        comment_count   = comment_count,
+                        like_count      = like_count,
+                        uploaded_at     = uploaded_at,
+                        caption         = caption)
+
+            except:
+                print("corousal")
+
+                uploaded_at   = datetime.fromtimestamp(post['taken_at'])
+
+                insta_media = InstagramMedia.objects.create(
+                        user_id         = 1,
+                        comment_count   = post['comment_count'],
+                        like_count      = post['like_count'],
+                        uploaded_at     = uploaded_at,
+                        caption         = post['caption']['text'])
+
+                for media in post['carousel_media']:
+                    carosal_media = InstagramCarouselMedia.objects.create(
+                        media_url   = media['image_versions2']['candidates'][0]['url']
+                        )
+                    insta_media.carousel.add(carosal_media)
+
+
+        print("Total {} objects created.",format(count))
+        return True
+    except Exception as e:
+        print(str(e))
+        return False

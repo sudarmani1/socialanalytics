@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from .models import InstagramUserAnalytics, TrackFollower
+from .models import InstagramUserAnalytics, TrackFollower, InstagramMedia
 
 from .helpers import *
 
@@ -17,7 +17,14 @@ from django.core.mail import EmailMessage
 
 # Create your views here.
 @login_required
-def index(request):
+def insta_index(request):
+    data = {}
+    data['medias'] = InstagramMedia.objects.filter(user=request.user)
+    return render(request,'insta/insta_dashboard.html',data)
+
+
+@login_required
+def insta_profile(request):
     data = {}
     # update_insta_analytics()
 
@@ -166,7 +173,7 @@ def twilio(request):
 
             for chunk in chunked:
                 message = client.messages.create(
-                                    from_='whatsapp:+14155238886',
+                                    from_='whatsapp:+1415238886',
                                     body=chunk,
                                     to='whatsapp:'+settings.MY_PHONE)
         else:
@@ -178,6 +185,35 @@ def twilio(request):
         return HttpResponse("True")
     else:
         return HttpResponse("False")
+
+
+# Webhook Error View : Later
+# @csrf_exempt
+# def twilio_errors(request):
+#     if request.method == 'POST':
+#         print("here")
+#         return HttpResponse("True")
+#     else:
+#         print("here124")
+#         return HttpResponse("Please Hit the POST request")
+
+
+# Change status of tracked_user
+@login_required
+def update_tracker(request):
+    try:
+        # Request Data
+        insta_pk        = request.POST.get('following_insta_id',None)
+        tracker_active  = request.POST.get('tracker_active',None)
+
+        # TrackFollower Object
+        tracked  = TrackFollower.objects.get(track_insta__insta_pk = insta_pk)
+        tracked.tracker_active = True if tracker_active == 'true' else False
+        tracked.save()
+
+        return JsonResponse({'status':True,'message':'Successfully Updated!'})
+    except Exception as e:
+        return JsonResponse({'status':False,'message':str(e)})
 
 
 def sendmail(request):
@@ -196,3 +232,19 @@ def sendmail(request):
         return HttpResponse("Sent mail")
     except Exception as e:
         print("Uh oh, We met error :",str(e))
+
+
+@login_required
+def insta_my_posts(request):
+    data = {}
+
+    create_my_post_media()
+    return JsonResponse({'status':True,'message':'Successfully Updated!'})
+    # follower_user = InstagramFollower.objects.filter(user=request.user)
+
+    # If no object then create follower list first
+    # if not follower_user.exists():
+        # create_insta_follower_list()
+    
+    # else:
+        # follower_user = InstagramFollower.objects.filter(user=request.user)

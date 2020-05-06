@@ -49,7 +49,7 @@ BASE_APPS = [
 USER_APPS = [
     'insta',
     'users',
-    'fb',
+    'fb'
 ]
 
 INSTALLED_APPS = BASE_APPS + USER_APPS

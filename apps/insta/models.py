@@ -70,3 +70,23 @@ class TrackFollower(models.Model):
 
     def __str__(self):
         return str(self.tracked_by)
+
+
+class InstagramCarouselMedia(models.Model):
+    media_url       = models.CharField(max_length=255)
+
+    def __str__(self):
+        return str(self.pk)
+
+
+class InstagramMedia(models.Model):
+    user            = models.ForeignKey(User,on_delete=models.CASCADE, null=True)
+    media_url       = models.CharField(max_length=255, null=True, blank=True)
+    comment_count   = models.CharField(max_length=255)
+    like_count      = models.CharField(max_length=255)
+    caption         = models.CharField(max_length=255)
+    uploaded_at     = models.DateTimeField(blank=True, null=True)
+    carousel        = models.ManyToManyField('InstagramCarouselMedia', related_name='carousel', blank=True)
+
+    def __str__(self):
+        return str(self.user.pk)

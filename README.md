@@ -11,7 +11,6 @@ Analytics &amp; some nasty hidden features
 ##NewInstaIdeas
 	- Ask for authentication cron run.
 	- Update sync manually
-	- Get sms link to ask for 
 	- Get SMS/mail when someone unfollows me. Once in a day
     - On Twilio WhatsApp command, update the Insta List
     - Need Notification for frontend
