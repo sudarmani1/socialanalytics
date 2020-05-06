@@ -1,3 +1,4 @@
+import time
 import requests
 from datetime import datetime
 from bs4 import BeautifulSoup
@@ -323,10 +324,12 @@ def view_dp_of_account(username):
     try:
         url     = 'https://www.instadp.com/fullsize/'+username
         page    = requests.get(url)
+        time.sleep(5.0)
         soup    = BeautifulSoup(page.text, 'html.parser')
+        time.sleep(2.0)
         img_tag = soup.find_all("img", class_="picture")[0]
         img_url = img_tag.get('src')
-        return img_url
+        return str(img_url)
     except Exception as e:
         return str(e)
 

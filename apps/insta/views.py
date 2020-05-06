@@ -114,6 +114,7 @@ def twilio(request):
     if request.method == 'POST':
         wsp_message = (request.POST.get('Body')).lower()
 
+        media_provided = False
         account_sid = settings.ACCOUNT_SID
         auth_token  = settings.AUTH_TOKEN
         client = Client(account_sid, auth_token)
@@ -159,8 +160,10 @@ def twilio(request):
 
         elif wsp_message.startswith('viewdp:'):
             account_username = wsp_message.split(':')[1]
-            body = view_dp_of_account(account_username)
-
+            body = account_username
+            pic_url = view_dp_of_account(account_username)
+            media_provided = True
+            media_url = pic_url
         else:
             body = "Invalid Choice... Please reply 'help' to see the option"
 
@@ -177,10 +180,17 @@ def twilio(request):
                                     body=chunk,
                                     to='whatsapp:'+settings.MY_PHONE)
         else:
-            message = client.messages.create(
-                                    from_='whatsapp:+14155238886',
-                                    body=body,
-                                    to='whatsapp:'+settings.MY_PHONE)
+            if media_provided == False:
+                message = client.messages.create(
+                                        from_='whatsapp:+14155238886',
+                                        body=body,
+                                        to='whatsapp:'+settings.MY_PHONE)
+            else:
+                message = client.messages.create(
+                                        from_='whatsapp:+14155238886',
+                                        body=body,
+                                        media_url=media_url,
+                                        to='whatsapp:'+settings.MY_PHONE)
 
         return HttpResponse("True")
     else:
