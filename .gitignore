@@ -7,4 +7,4 @@ staticfiles/*
 .idea
 .coverage
 coverage_report/*
-htmlcov/
+htmlcov

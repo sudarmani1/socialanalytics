@@ -96,8 +96,12 @@ WSGI_APPLICATION = 'analytics.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': "django.db.backends.postgresql_psycopg2",
+        'NAME': 'socan_db',
+        'USER': 'postgres',
+        'PASSWORD': 'secret',
+        'HOST': 'localhost',
+        'PORT': "",
     }
 }
 
@@ -167,3 +171,15 @@ EMAIL_USE_TLS = True
 SENDGRID_SANDBOX_MODE_IN_DEBUG=True
 SENDGRID_ECHO_TO_STDOUT=True
 
+
+DEFAULT_USER_FIRSTNAME = "D"
+DEFAULT_USER_LASTNAME = "Ashwin"
+DEFAULT_USER_NAME = "admin"
+DEFAULT_USER_EMAIL = "admin@admin.com"
+
+DEFAULT_USER_IS_STAFF = True
+DEFAULT_USER_IS_SUPERUSER = True
+DEFAULT_USER_ACTIVE = True
+
+
+DEFAULT_USER_PASSWORD = 'secret'
