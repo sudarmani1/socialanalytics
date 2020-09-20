@@ -4,6 +4,10 @@ from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .models import InstagramUserAnalytics, TrackFollower, InstagramMedia
 
 from .helpers import *
@@ -258,3 +262,9 @@ def insta_my_posts(request):
     
     # else:
         # follower_user = InstagramFollower.objects.filter(user=request.user)
+
+
+class DemoTestCase(APIView):
+
+    def get(self, request):
+        return Response(True, status=status.HTTP_200_OK)

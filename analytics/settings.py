@@ -52,7 +52,12 @@ USER_APPS = [
     'fb'
 ]
 
-INSTALLED_APPS = BASE_APPS + USER_APPS
+THIRD_PARTY_APPS = [
+    'rest_framework',
+
+]
+
+INSTALLED_APPS = BASE_APPS + USER_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -161,3 +166,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 SENDGRID_SANDBOX_MODE_IN_DEBUG=True
 SENDGRID_ECHO_TO_STDOUT=True
+

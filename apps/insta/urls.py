@@ -13,4 +13,7 @@ urlpatterns = [
     path('twilio/', views.twilio, name='twilio'),
     # path('twilio-errors/', views.twilio_errors, name='twilio-errors'),
     path('sendmail', views.sendmail, name='sendmail'),
+
+    # TestCase demo
+    path('test/', views.DemoTestCase.as_view(), name='testcase-demo'),
 ]
