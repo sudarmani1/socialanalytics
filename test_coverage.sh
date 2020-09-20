@@ -9,10 +9,11 @@ mkdir -p $COVERAGE_REPORT_DIR
 } &> /dev/null
 
 # run coverage
-coverage run  --source='.' manage.py test apps common --no-input
+coverage run  --source='.' manage.py test apps --no-input
 
 if [ $? -eq 0 ]; then
     coverage report
     coverage xml -o $COVERAGE_REPORT_DIR/coverage.xml
+    coverage html -i $COVERAGE_REPORT_DIR/coverage.html
     echo OK
 fi
