@@ -16,16 +16,22 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 # dbengine = settings.DATABASES['default']['ENGINE']
-dbname = settings.DATABASES['default']['NAME']
-dbhost = settings.DATABASES['default']['HOST']
-dbuser = settings.DATABASES['default']['USER']
-dbpass = settings.DATABASES['default']['PASSWORD']
-dbport = settings.DATABASES['default']['PORT']
+# dbname = settings.DATABASES['default']['NAME']
+# dbhost = settings.DATABASES['default']['HOST']
+# dbuser = settings.DATABASES['default']['USER']
+# dbpass = settings.DATABASES['default']['PASSWORD']
+# dbport = settings.DATABASES['default']['PORT']
 
 
 def createDatabase():
     result = False
     try:
+        dbname = settings.DATABASES['default']['NAME']
+        dbhost = settings.DATABASES['default']['HOST']
+        dbuser = settings.DATABASES['default']['USER']
+        dbpass = settings.DATABASES['default']['PASSWORD']
+        dbport = settings.DATABASES['default']['PORT']
+
         con = psycopg2.connect(dbname="postgres", user=dbuser, password=dbpass, host=dbhost, port=dbport)
         con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         print("creating database...{0}".format(dbname))
@@ -45,6 +51,12 @@ def createDatabase():
 def dropDatabase():
     result = False
     try:
+        dbname = settings.DATABASES['default']['NAME']
+        dbhost = settings.DATABASES['default']['HOST']
+        dbuser = settings.DATABASES['default']['USER']
+        dbpass = settings.DATABASES['default']['PASSWORD']
+        dbport = settings.DATABASES['default']['PORT']
+
         con = psycopg2.connect(dbname="postgres", user=dbuser, password=dbpass, host=dbhost)
         con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         cursor = con.cursor()
@@ -75,7 +87,7 @@ def CreateRootUser():
     user.is_active = settings.DEFAULT_USER_ACTIVE
     user.is_superuser = settings.DEFAULT_USER_IS_SUPERUSER
     user.save()
-    print(f"User created with username:{user.username}, is_superuser:{user.is_superuser}")
+    print(f"User created with username:{user.username}, Password:{settings.DEFAULT_USER_PASSWORD}")
 
 
 def runMigrations():
