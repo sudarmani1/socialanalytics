@@ -188,3 +188,18 @@ DEFAULT_USER_ACTIVE = True
 
 
 DEFAULT_USER_PASSWORD = 'secret'
+
+
+# Sentry Settings
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+sentry_sdk.init(
+    dsn="https://3703c6a497824c33bbd659cc3ede542f@o481886.ingest.sentry.io/5531247",
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
