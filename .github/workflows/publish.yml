@@ -10,7 +10,7 @@ jobs:
     steps:
     - name: Running Tests
       id: tests
-      run: echo Testing Done!.!!!
+      run: echo Testing Done!.!!
 
   build:
     runs-on: ubuntu-latest
