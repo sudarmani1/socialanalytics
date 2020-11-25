@@ -22,3 +22,4 @@ jobs:
           heroku_app_name: "socan-beta" #Must be unique in Heroku
           heroku_email: ${{secrets.HEROKU_EMAIL}}
           branch: "master"
+
