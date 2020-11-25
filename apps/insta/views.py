@@ -19,12 +19,17 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.template.loader import get_template
 from django.core.mail import EmailMessage
 
+
 # Create your views here.
+# from apps.users.models import Notification
+
+
+
 @login_required
 def insta_index(request):
     data = {}
     data['medias'] = InstagramMedia.objects.filter(user=request.user)
-    return render(request,'insta/insta_dashboard.html',data)
+    return render(request, 'insta/insta_dashboard.html', data)
 
 
 @login_required
@@ -32,18 +37,20 @@ def insta_profile(request):
     data = {}
     # update_insta_analytics()
 
-    data['notifications'] =Notification.objects.filter(is_read=False)
+    # data['notifications'] = Notification.objects.filter(is_read=False)
     data['analytics'] = InstagramUserAnalytics.objects.filter(user=request.user).last()
-    return render(request,'insta/my_insta_dashbaord.html',data)
+    return render(request, 'insta/my_insta_dashbaord.html', data)
+
 
 @login_required
 def update_insta_feed(request):
     try:
         update_insta_analytics()
         # pass
-        return JsonResponse({'status':True,'message':'Successfully Updated!'})
+        return JsonResponse({'status': True, 'message': 'Successfully Updated!'})
     except Exception as e:
-        return JsonResponse({'status':False,'message':str(e)})
+        return JsonResponse({'status': False, 'message': str(e)})
+
 
 @login_required
 def insta_follower_list(request):
@@ -54,12 +61,12 @@ def insta_follower_list(request):
     # If no object then create follower list first
     if not follower_user.exists():
         create_insta_follower_list()
-    
+
     else:
         follower_user = InstagramFollower.objects.filter(user=request.user)
 
-    data['private_profile_count'] = follower_user.filter(is_private = True).count()
-    data['verified_profile_count'] = follower_user.filter(is_verified = True).count()
+    data['private_profile_count'] = follower_user.filter(is_private=True).count()
+    data['verified_profile_count'] = follower_user.filter(is_verified=True).count()
     data['follower_user_count'] = follower_user.count()
 
     page = request.GET.get('page', 1)
@@ -73,7 +80,7 @@ def insta_follower_list(request):
         follower_user = paginator.page(paginator.num_pages)
 
     data['follower_user'] = follower_user
-    return render(request,'insta/insta_followers.html',data)
+    return render(request, 'insta/insta_followers.html', data)
 
 
 @login_required
@@ -88,8 +95,8 @@ def insta_following_list(request):
     else:
         following_user = InstagramFollowing.objects.filter(user=request.user)
 
-    data['private_profile_count'] = following_user.filter(is_private = True).count()
-    data['verified_profile_count'] = following_user.filter(is_verified = True).count()
+    data['private_profile_count'] = following_user.filter(is_private=True).count()
+    data['verified_profile_count'] = following_user.filter(is_verified=True).count()
     data['following_user_count'] = following_user.count()
 
     page = request.GET.get('page', 1)
@@ -103,14 +110,14 @@ def insta_following_list(request):
         following_user = paginator.page(paginator.num_pages)
 
     data['following_user'] = following_user
-    return render(request,'insta/insta_following.html',data)
+    return render(request, 'insta/insta_following.html', data)
 
 
 @login_required
 def insta_tracked_accounts(request):
     data = {}
     data['tracked_user'] = TrackFollower.objects.filter(track_insta__user=request.user)
-    return render(request,'insta/insta_tracked.html',data)
+    return render(request, 'insta/insta_tracked.html', data)
 
 
 @csrf_exempt
@@ -120,7 +127,7 @@ def twilio(request):
 
         media_provided = False
         account_sid = settings.ACCOUNT_SID
-        auth_token  = settings.AUTH_TOKEN
+        auth_token = settings.AUTH_TOKEN
         client = Client(account_sid, auth_token)
 
         if wsp_message == 'hi':
@@ -129,7 +136,7 @@ def twilio(request):
                 \nVersion : 0.01
                 \n- _Developed By D Ashwin_
                 """
-        
+
         elif wsp_message == 'help':
             body = """
                 [+] Select one Option [+] \n-------------[ SocAnt ]------------
@@ -142,10 +149,10 @@ def twilio(request):
                 """
         elif wsp_message == '1':
             body = get_insta_analytics()
-        
+
         elif wsp_message == '2':
             body = update_insta_analytics()
-        
+
         elif wsp_message == '3':
             body = my_insta_details()
 
@@ -174,27 +181,27 @@ def twilio(request):
         # Check if body char limit exceeds 1600 Chars. 
         limit = 1500
 
-        if len(body) > limit :
+        if len(body) > limit:
             n = limit
-            chunked = [body[i:i+n] for i in range(0, len(body), n)]
+            chunked = [body[i:i + n] for i in range(0, len(body), n)]
 
             for chunk in chunked:
                 message = client.messages.create(
-                                    from_='whatsapp:+1415238886',
-                                    body=chunk,
-                                    to='whatsapp:'+settings.MY_PHONE)
+                    from_='whatsapp:+1415238886',
+                    body=chunk,
+                    to='whatsapp:' + settings.MY_PHONE)
         else:
             if media_provided == False:
                 message = client.messages.create(
-                                        from_='whatsapp:+14155238886',
-                                        body=body,
-                                        to='whatsapp:'+settings.MY_PHONE)
+                    from_='whatsapp:+14155238886',
+                    body=body,
+                    to='whatsapp:' + settings.MY_PHONE)
             else:
                 message = client.messages.create(
-                                        from_='whatsapp:+14155238886',
-                                        body=body,
-                                        media_url=media_url,
-                                        to='whatsapp:'+settings.MY_PHONE)
+                    from_='whatsapp:+14155238886',
+                    body=body,
+                    media_url=media_url,
+                    to='whatsapp:' + settings.MY_PHONE)
 
         return HttpResponse("True")
     else:
@@ -217,35 +224,35 @@ def twilio(request):
 def update_tracker(request):
     try:
         # Request Data
-        insta_pk        = request.POST.get('following_insta_id',None)
-        tracker_active  = request.POST.get('tracker_active',None)
+        insta_pk = request.POST.get('following_insta_id', None)
+        tracker_active = request.POST.get('tracker_active', None)
 
         # TrackFollower Object
-        tracked  = TrackFollower.objects.get(track_insta__insta_pk = insta_pk)
+        tracked = TrackFollower.objects.get(track_insta__insta_pk=insta_pk)
         tracked.tracker_active = True if tracker_active == 'true' else False
         tracked.save()
 
-        return JsonResponse({'status':True,'message':'Successfully Updated!'})
+        return JsonResponse({'status': True, 'message': 'Successfully Updated!'})
     except Exception as e:
-        return JsonResponse({'status':False,'message':str(e)})
+        return JsonResponse({'status': False, 'message': str(e)})
 
 
 def sendmail(request):
     try:
         ctx = {
-            "schedule_type"        : "test"
+            "schedule_type": "test"
         }
 
         subject = "demo"
 
         message = get_template('email/demo.html').render(ctx)
-        msg = EmailMessage(subject, message, to=('kewef44103@katamo1.com',),from_email='kewef44103@katamo1.com')
+        msg = EmailMessage(subject, message, to=('kewef44103@katamo1.com',), from_email='kewef44103@katamo1.com')
         msg.content_subtype = 'html'
         msg.send()
         print("Mail Sent Successfully")
         return HttpResponse("Sent mail")
     except Exception as e:
-        print("Uh oh, We met error :",str(e))
+        print("Uh oh, We met error :", str(e))
 
 
 @login_required
@@ -253,15 +260,15 @@ def insta_my_posts(request):
     data = {}
 
     create_my_post_media()
-    return JsonResponse({'status':True,'message':'Successfully Updated!'})
+    return JsonResponse({'status': True, 'message': 'Successfully Updated!'})
     # follower_user = InstagramFollower.objects.filter(user=request.user)
 
     # If no object then create follower list first
     # if not follower_user.exists():
-        # create_insta_follower_list()
-    
+    # create_insta_follower_list()
+
     # else:
-        # follower_user = InstagramFollower.objects.filter(user=request.user)
+    # follower_user = InstagramFollower.objects.filter(user=request.user)
 
 
 class DemoTestCase(APIView):

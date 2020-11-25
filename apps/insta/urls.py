@@ -16,15 +16,13 @@ urlpatterns = [
 
     # TestCase demo
     path('test/', views.DemoTestCase.as_view(), name='testcase-demo'),
-
-
 ]
 
 
 def trigger_error(request):
     division_by_zero = 1 / 0
 
-urlpatterns = [
+urlpatterns += [
     path('sentry-debug/', trigger_error),
     # ...
 ]

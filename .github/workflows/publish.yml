@@ -1,0 +1,24 @@
+name: Flask Pipeline
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Running Tests
+      id: tests
+      run: echo Testing Done!.!!!
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.5.6 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "socan-beta" #Must be unique in Heroku
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          branch: "master"
