@@ -1,4 +1,4 @@
-name: Flask Pipeline
+name: Socan Pipeline
 
 on:
   push:
