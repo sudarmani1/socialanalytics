@@ -15,7 +15,7 @@ from unipath import Path
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-from apps import insta
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ENV_DIR = Path(__file__).ancestor(2)
@@ -23,6 +23,7 @@ PROJECT_APPS = Path(__file__).ancestor(2)
 
 sys.path.insert(0, Path(PROJECT_APPS, 'apps'))
 load_dotenv(os.path.join(ENV_DIR, '.env'))
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/

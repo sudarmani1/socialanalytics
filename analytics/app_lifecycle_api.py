@@ -1,49 +1,46 @@
 import glob
+import json
 import os
+import shutil
+import sys
 import traceback
 
 import psycopg2
-from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.core.management import call_command
 from django.core.wsgi import get_wsgi_application
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
+
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 application = get_wsgi_application()
-
+import settings
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-# dbengine = settings.DATABASES['default']['ENGINE']
-# dbname = settings.DATABASES['default']['NAME']
-# dbhost = settings.DATABASES['default']['HOST']
-# dbuser = settings.DATABASES['default']['USER']
-# dbpass = settings.DATABASES['default']['PASSWORD']
-# dbport = settings.DATABASES['default']['PORT']
+dbengine = "django.db.backends.postgresql_psycopg2"
+dbname = settings.DATABASES['default']['NAME']
+dbhost = "localhost"
+dbuser = "postgres"
+dbpass = "secret"
+dbport = ""
 
 
 def createDatabase():
     result = False
     try:
-        dbname = settings.DATABASES['default']['NAME']
-        dbhost = settings.DATABASES['default']['HOST']
-        dbuser = settings.DATABASES['default']['USER']
-        dbpass = settings.DATABASES['default']['PASSWORD']
-        dbport = settings.DATABASES['default']['PORT']
-
         con = psycopg2.connect(dbname="postgres", user=dbuser, password=dbpass, host=dbhost, port=dbport)
         con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-        print("creating database...{0}".format(dbname))
         cursor = con.cursor()
         createsql = "create database %s " % (dbname)
         cursor.execute(createsql)
         cursor.close()
         con.close()
-        print("created database...{0}".format(dbname))
         result = True
+        print(f"Created new database {dbname}")
     except Exception as error:
-        print(traceback.format_exc())
         raise error
     return result
 
@@ -51,43 +48,35 @@ def createDatabase():
 def dropDatabase():
     result = False
     try:
-        dbname = settings.DATABASES['default']['NAME']
-        dbhost = settings.DATABASES['default']['HOST']
-        dbuser = settings.DATABASES['default']['USER']
-        dbpass = settings.DATABASES['default']['PASSWORD']
-        dbport = settings.DATABASES['default']['PORT']
-
         con = psycopg2.connect(dbname="postgres", user=dbuser, password=dbpass, host=dbhost)
         con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         cursor = con.cursor()
         dropsql = 'drop database %s' % (dbname)
-        print("droping database...{0}".format(dbname))
         try:
             cursor.execute(dropsql)
         except:
-            print(traceback.format_exc())
+            pass
         cursor.close()
         con.close()
-        print("dropped database...{0}".format(dbname))
         result = True
+        print(f"DB Dropped {dbname}")
     except Exception as error:
-        print(traceback.format_exc())
+        print(error)
         # raise error
     return result
 
-
 def CreateRootUser():
-    user = User()
-    user.first_name = settings.DEFAULT_USER_FIRSTNAME
-    user.last_name = settings.DEFAULT_USER_LASTNAME
-    user.username = settings.DEFAULT_USER_NAME
-    user.set_password = settings.DEFAULT_USER_PASSWORD
-    user.email = settings.DEFAULT_USER_EMAIL
-    user.is_staff = settings.DEFAULT_USER_IS_STAFF
-    user.is_active = settings.DEFAULT_USER_ACTIVE
-    user.is_superuser = settings.DEFAULT_USER_IS_SUPERUSER
-    user.save()
-    print(f"User created with username:{user.username}, Password:{settings.DEFAULT_USER_PASSWORD}")
+        user = User()
+        user.username = "admin"
+        user.first_name = "admin"
+        user.last_name = "test"
+        user.set_password("pass4321")
+        user.email = "admin@admin.com"
+        user.is_staff = True
+        user.is_active = True
+        user.is_superuser = True
+        user.save()
+        print(f"New Admin created. {user.username}")
 
 
 def runMigrations():
