@@ -1,4 +1,4 @@
-from . import views
+from . import views, api_views
 from django.urls import path, include
 
 urlpatterns = [
@@ -18,6 +18,9 @@ urlpatterns = [
     path('test/', views.DemoTestCase.as_view(), name='testcase-demo'),
 ]
 
+urlpatterns += [
+    path('api/v1/testAPI/', api_views.DemoApiView.as_view(), name='testcase-demo'),
+]
 
 def trigger_error(request):
     division_by_zero = 1 / 0
