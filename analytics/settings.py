@@ -44,17 +44,18 @@ BASE_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
 ]
 
 USER_APPS = [
-    'insta',
-    'users',
-    'fb'
+    'apps.insta',
+    'apps.users',
+    'apps.fb'
 ]
 
 THIRD_PARTY_APPS = [
     'rest_framework',
-
+    'drf_yasg'
 ]
 
 INSTALLED_APPS = BASE_APPS + USER_APPS + THIRD_PARTY_APPS
@@ -94,22 +95,22 @@ WSGI_APPLICATION = 'analytics.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': "django.db.backends.postgresql_psycopg2",
-#         'NAME': 'socan_db',
-#         'USER': 'postgres',
-#         'PASSWORD': 'secret',
-#         'HOST': 'localhost',
-#         'PORT': "",
-#     }
-# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase',
+        'ENGINE': "django.db.backends.postgresql_psycopg2",
+        'NAME': 'socan_db',
+        'USER': 'postgres',
+        'PASSWORD': 'secret',
+        'HOST': 'localhost',
+        'PORT': "",
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'mydatabase',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

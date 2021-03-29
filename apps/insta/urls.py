@@ -1,4 +1,4 @@
-from . import views
+from apps.insta import views, api_views
 from django.urls import path, include
 
 urlpatterns = [
@@ -15,16 +15,6 @@ urlpatterns = [
     path('sendmail', views.sendmail, name='sendmail'),
 
     # TestCase demo
-    path('test/', views.DemoTestCase.as_view(), name='testcase-demo'),
-
-
-]
-
-
-def trigger_error(request):
-    division_by_zero = 1 / 0
-
-urlpatterns = [
-    path('sentry-debug/', trigger_error),
-    # ...
+    path('test/', api_views.DemoApiView.as_view(), name='testcase-demo'),
+    path('update-insta/', api_views.UpdateInsta.as_view(), name='update-insta'),
 ]

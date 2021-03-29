@@ -5,8 +5,8 @@ from bs4 import BeautifulSoup
 
 from django.conf import settings
 
-from users.models import Notification
-from .models import InstagramUserAnalytics, LinkedFbInfo, InstagramFollowing, InstagramFollower, TrackFollower, InstagramMedia, InstagramCarouselMedia
+from apps.users.models import Notification
+from apps.insta.models import InstagramUserAnalytics, LinkedFbInfo, InstagramFollowing, InstagramFollower, TrackFollower, InstagramMedia, InstagramCarouselMedia
 
 from InstagramAPI import InstagramAPI
 
@@ -141,12 +141,12 @@ def update_insta_analytics():
         create_insta_analytic(result)
 
         # Find Out new followers/unfollowers
-        api.getSelfUserFollowers()
-        follower_result = api.LastJson
-        current_status  = detect_new_follow_unfollow(follower_result)
+        # api.getSelfUserFollowers()
+        # follower_result = api.LastJson
+        # current_status  = detect_new_follow_unfollow(follower_result)
 
-        create_notification("Successfully Synched")
-        return current_status
+        # create_notification("Successfully Synched")
+        return True
     except Exception as e:
         print(str(e))
         return "There is some issue while syncing your Insta data. Error : " + str(e)

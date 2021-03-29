@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import InstagramUserAnalytics, TrackFollower, InstagramFollowing, InstagramFollower, InstagramMedia, InstagramCarouselMedia
-from users.models import Notification
+from apps.users.models import Notification
 
 
 class InstagramFollowingAdmin(admin.ModelAdmin):

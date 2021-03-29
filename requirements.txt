@@ -27,3 +27,4 @@ urllib3==1.25.10
 whitenoise
 beautifulsoup4
 djangorestframework==3.11.1
+drf-yasg
