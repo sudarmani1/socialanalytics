@@ -10,7 +10,12 @@ from twilio.rest import Client
 from .helpers import *
 
 
+
 # Create your views here.
+# from apps.users.models import Notification
+
+
+
 @login_required
 def insta_index(request):
     data = {}
@@ -252,6 +257,7 @@ def insta_my_posts(request):
     # If no object then create follower list first
     # if not follower_user.exists():
     # create_insta_follower_list()
+
 
     # else:
     # follower_user = InstagramFollower.objects.filter(user=request.user)

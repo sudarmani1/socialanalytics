@@ -18,4 +18,6 @@ urlpatterns = [
     path('test/', api_views.DemoApiView.as_view(), name='testcase-demo'),
     path('update-insta/', api_views.UpdateInsta.as_view(), name='update-insta'),
     path('stalk/user/', api_views.StalkInstaView.as_view(), name='insta-stalk'),
+    path('test/', views.DemoTestCase.as_view(), name='testcase-demo'),
 ]
+

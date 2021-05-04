@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -32,4 +31,3 @@ class StalkInstaView(APIView):
         a_class = data[0].find_all('a')
         url_ = a_class[0].get('href')
         return Response({"image_url": url_}, status=status.HTTP_200_OK)
-

@@ -15,7 +15,11 @@ def init(db_init=True):
         app_lifecycle_api.dropDatabase()
         app_lifecycle_api.createDatabase()
         app_lifecycle_api.runMigrations()
+<<<<<<< HEAD
         app_lifecycle_api.CreateRootUser()
+=======
+    # app_lifecycle_api.CreateRootUser()
+>>>>>>> 5c7eea61c618f638294d6bdd7e98ed9d8509381b
 
 
 if __name__ == '__main__':
