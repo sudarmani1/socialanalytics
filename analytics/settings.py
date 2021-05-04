@@ -14,13 +14,12 @@ import os, sys
 from unipath import Path
 from dotenv import load_dotenv
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ENV_DIR  = Path(__file__).ancestor(2)
-PROJECT_APPS    = Path(__file__).ancestor(2)
+ENV_DIR = Path(__file__).ancestor(2)
+PROJECT_APPS = Path(__file__).ancestor(2)
 
-sys.path.insert(0, Path(PROJECT_APPS, 'apps'))
+sys.path.insert(0, BASE_DIR)
 load_dotenv(os.path.join(ENV_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
@@ -33,7 +32,6 @@ SECRET_KEY = 'zz2snuxx4b$5u_7_%dhkbt%j+@q)pexph-(-70&$ol3-on&6vv'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -76,7 +74,7 @@ ROOT_URLCONF = 'analytics.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'),],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -90,7 +88,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'analytics.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -130,20 +127,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE =  'Asia/Kolkata'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
-
 
 LOGIN_URL = "/user/login/"
 # Static files (CSS, JavaScript, Images)
@@ -156,13 +151,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-
 ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
-AUTH_TOKEN  = os.getenv("TWILIO_AUTH_TOKEN")
-INSTA_USERNAME  = os.getenv("INSTA_USERNAME")
-INSTA_PASSWORD  = os.getenv("INSTA_PASSWORD")
-MY_PHONE  = os.getenv("MY_PHONE")
-
+AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+INSTA_USERNAME = os.getenv("INSTA_USERNAME")
+INSTA_PASSWORD = os.getenv("INSTA_PASSWORD")
+MY_PHONE = os.getenv("MY_PHONE")
 
 SENDGRID_API_KEY = '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'
 # SENDGRID_API_KEY = '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'
@@ -174,9 +167,8 @@ EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-SENDGRID_SANDBOX_MODE_IN_DEBUG=True
-SENDGRID_ECHO_TO_STDOUT=True
-
+SENDGRID_SANDBOX_MODE_IN_DEBUG = True
+SENDGRID_ECHO_TO_STDOUT = True
 
 DEFAULT_USER_FIRSTNAME = "D"
 DEFAULT_USER_LASTNAME = "Ashwin"
@@ -187,9 +179,7 @@ DEFAULT_USER_IS_STAFF = True
 DEFAULT_USER_IS_SUPERUSER = True
 DEFAULT_USER_ACTIVE = True
 
-
 DEFAULT_USER_PASSWORD = 'secret'
-
 
 # Sentry Settings
 import sentry_sdk

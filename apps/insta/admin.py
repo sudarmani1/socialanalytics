@@ -1,20 +1,10 @@
+# Register your models here.
 from django.contrib import admin
-from .models import InstagramUserAnalytics, TrackFollower, InstagramFollowing, InstagramFollower, InstagramMedia, InstagramCarouselMedia
-from apps.users.models import Notification
+from django.apps import apps
 
+# Register your models here.
 
-class InstagramFollowingAdmin(admin.ModelAdmin):
-    search_fields = ("insta_username","insta_full_name")
+my_app = apps.get_app_config('insta')
 
-
-class InstagramFollowerAdmin(admin.ModelAdmin):
-    search_fields = ("insta_username","insta_full_name")
-
-
-admin.site.register(InstagramUserAnalytics)
-admin.site.register(InstagramFollowing, InstagramFollowingAdmin)
-admin.site.register(InstagramFollower, InstagramFollowerAdmin)
-admin.site.register(TrackFollower)
-admin.site.register(Notification)
-admin.site.register(InstagramMedia)
-admin.site.register(InstagramCarouselMedia)
+for model in list(my_app.get_models()):
+    admin.site.register(model)

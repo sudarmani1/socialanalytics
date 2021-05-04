@@ -23,6 +23,8 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
+from apps import insta
+
 schema_view = get_schema_view(
     openapi.Info(
         title="Socan API",
@@ -35,9 +37,9 @@ schema_view = get_schema_view(
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
-                  path('insta/', include('insta.urls')),
-                  path('user/', include('users.urls')),
-                  path('fb/', include('fb.urls')),
+                  path('insta/', include('apps.insta.urls')),
+                  path('user/', include('apps.users.urls')),
+                  path('fb/', include('apps.fb.urls')),
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += [
