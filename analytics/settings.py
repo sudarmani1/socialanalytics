@@ -34,7 +34,7 @@ SECRET_KEY = 'zz2snuxx4b$5u_7_%dhkbt%j+@q)pexph-(-70&$ol3-on&6vv'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['socan-beta.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
