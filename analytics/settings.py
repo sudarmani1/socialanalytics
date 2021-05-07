@@ -32,7 +32,7 @@ load_dotenv(os.path.join(ENV_DIR, '.env'))
 SECRET_KEY = 'zz2snuxx4b$5u_7_%dhkbt%j+@q)pexph-(-70&$ol3-on&6vv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -154,12 +154,12 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
-AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
-INSTA_USERNAME = os.getenv("INSTA_USERNAME")
-INSTA_PASSWORD = os.getenv("INSTA_PASSWORD")
-MY_PHONE = os.getenv("MY_PHONE")
+#
+# ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
+# AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+# INSTA_USERNAME = os.getenv("INSTA_USERNAME")
+# INSTA_PASSWORD = os.getenv("INSTA_PASSWORD")
+# MY_PHONE = os.getenv("MY_PHONE")
 
 SENDGRID_API_KEY = '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'
 # SENDGRID_API_KEY = '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'
