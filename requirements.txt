@@ -30,3 +30,4 @@ whitenoise
 beautifulsoup4
 djangorestframework==3.11.1
 drf-yasg
+psycopg2-binary
