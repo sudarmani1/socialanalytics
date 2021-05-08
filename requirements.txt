@@ -7,7 +7,7 @@ django-heroku
 django-sendgrid-v5==0.8.1
 djangorestframework
 future==0.18.2
-gunicorn==20.0.4
+gunicorn
 httplib2==0.14.0
 idna==2.8
 imageio==2.1.2
