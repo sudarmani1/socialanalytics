@@ -95,10 +95,11 @@ WSGI_APPLICATION = 'analytics.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-import dj_database_url
-DATABASES = {
-    'default': dj_database_url.config()
-}
+# import dj_database_url
+# DATABASES = {
+#     'default': dj_database_url.config()
+# }
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': "django.db.backends.postgresql_psycopg2",
@@ -106,15 +107,15 @@ DATABASES = {
 #         'USER': 'postgres',
 #         'PASSWORD': 'secret',
 #         'HOST': 'localhost',
-#         'PORT': "5432",
+#         'PORT': "",
 #     }
 # }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': 'mydatabase',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase',
+    }
+}
 
 
 # Password validation
