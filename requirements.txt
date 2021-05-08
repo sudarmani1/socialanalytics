@@ -2,12 +2,12 @@ beautifulsoup4
 certifi==2019.9.11
 chardet==3.0.4
 decorator==4.0.11
-Django
-django-heroku
+Django==3.1.10
+django-heroku==0.3.1
 django-sendgrid-v5==0.8.1
 djangorestframework
 future==0.18.2
-gunicorn
+gunicorn==20.1.0
 httplib2==0.14.0
 idna==2.8
 imageio==2.1.2
@@ -29,5 +29,5 @@ Unipath==1.1
 urllib3==1.25.10
 whitenoise
 drf-yasg
-psycopg2-binary
-cloudscraper
+psycopg2-binary==2.8.6
+cloudscraper==1.2.58
